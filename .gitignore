@@ -1,3 +1,9 @@
+# Jetbrains IDE
+.idea
+
+# Env file
+.env
+
 # dependencies
 node_modules
 *.pnp
