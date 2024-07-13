@@ -10,6 +10,10 @@ import templateBGImage from '../../assets/images/events-template-bg.png';
 import moment from 'moment';
 
 
+class Colors {
+    static red = '#C13100';
+}
+
 interface ShortEvent {
     id: number
     title: string
@@ -149,7 +153,7 @@ const RegistrationButton = () => {
             color: 'white',
         }}>
             <div style={{
-                backgroundColor: 'red',
+                backgroundColor: Colors.red,
                 content: '',
                 alignSelf: 'center',
                 width: 27,
@@ -186,7 +190,7 @@ const ButtonComponent = ({text, onClick}: { text: string, onClick?: () => void }
             onClick={onClick}
             style={{
                 textTransform: 'uppercase',
-                backgroundColor: 'red',
+                backgroundColor: Colors.red,
                 borderRadius: 60,
                 border: 'none',
                 color: 'white',
@@ -227,7 +231,7 @@ const EventComponent = ({event, setPopup}: {
                     color: 'white',
                     textTransform: 'uppercase',
                     textDecoration: 'underline',
-                    textDecorationColor: 'red',
+                    textDecorationColor: Colors.red,
                     textDecorationThickness: '4px',
                     textUnderlineOffset: '2px',
                 }}
@@ -241,9 +245,9 @@ const EventComponent = ({event, setPopup}: {
                 lineHeight: 36 / 30,
                 textAlign: 'left',
                 textWrap: 'wrap',
-                height: 300,
+                maxHeight: '20vh',
                 width: '70vw',
-                overflowX: "scroll"
+                overflowY: "scroll"
             }}>
                 <p
                     style={{
@@ -328,6 +332,7 @@ export const Events = () => {
         <>
             {
                 popup === PopupType.listParticipants ? <ListPopup
+                    backgroundColor={Colors.red}
                     onClose={() => setPopup(PopupType.none)}
                     title={'ПОИСК КОМАНДЫ'}
                     children={
@@ -345,6 +350,7 @@ export const Events = () => {
             }
             {
                 popup === PopupType.info ? <ListPopup
+                    backgroundColor={Colors.red}
                     onClose={() => setPopup(PopupType.none)}
                     title={'ПОДРОБНЕЕ'}
                     children={[
@@ -359,6 +365,7 @@ export const Events = () => {
             }
             {
                 popup === PopupType.participant ? <ListPopup
+                    backgroundColor={Colors.red}
                     onClose={() => setPopup(PopupType.none)}
                     onBack={() => setPopup(PopupType.listParticipants)}
                     title={<>Анкета от: <br/>{participant?.searcher_fio ?? ''}</>}

@@ -7,21 +7,22 @@ interface ListPopupProps {
     onBack?: () => void
     title?: React.ReactNode,
     children?: React.ReactNode,
+    backgroundColor?: string
 }
 
-export const ListPopup = ({onClose, title, children, onBack}: ListPopupProps) => {
+export const ListPopup = ({onClose, title, children, onBack, backgroundColor}: ListPopupProps) => {
     return (
         <div
             style={{
                 position: 'absolute',
                 height: '100vh',
+                width: '100vw',
                 overflow: 'clip',
                 paddingBottom: '16px',
                 top: 0,
                 right: 0,
                 bottom: 0,
                 left: 0,
-                zIndex: 200,
             }}
         >
             {onBack !== undefined ? <button
@@ -31,10 +32,10 @@ export const ListPopup = ({onClose, title, children, onBack}: ListPopupProps) =>
                     position: 'absolute',
                     top: 80 / 1080 * window?.innerHeight,
                     left: 1023 / 1900 * window?.innerWidth,
-                    zIndex: 500,
                     width: 100,
                     height: 100,
                     justifyContent: 'end',
+                    zIndex: 9999999,
                 }}
                 onClick={onBack}
             >
@@ -71,7 +72,8 @@ export const ListPopup = ({onClose, title, children, onBack}: ListPopupProps) =>
                     right: 0,
                     bottom: 0,
                     left: '50%',
-                    backgroundColor: 'red',
+                    backgroundColor: backgroundColor,
+                    zIndex: 999999,
                     padding: '135px 117px',
                 }}
             >
