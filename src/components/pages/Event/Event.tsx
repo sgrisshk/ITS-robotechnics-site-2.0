@@ -5,6 +5,7 @@ import add from "../../assets/icons/add.png"
 import axios from "axios";
 import {Link, useParams, useNavigate} from "react-router-dom";
 import Logo from "../../utils/logo/Logo";
+import {AppConfig} from "../../../core";
 
 interface EventInf {
     title: string;
@@ -76,7 +77,7 @@ export const Event = () => {
     }, []);
 
     useEffect(() => {
-        axios.get('//darleet.com/api/v0/classic_events/' + params.id + '/')
+        axios.get(`${AppConfig.apiUri}/api/v0/classic_events/` + params.id + '/')
             .then(res => {
                 setEventsInf(res.data);
             }).catch(err => {

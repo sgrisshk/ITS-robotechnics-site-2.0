@@ -4,6 +4,7 @@ import bizikov from "../../assets/images/bizikov.png"
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
+import {AppConfig} from "../../../core";
 
 interface Hardathon {
     title: string,
@@ -15,7 +16,7 @@ export const Hardathon = () => {
     const [hardathons, setHardathons] = useState<Hardathon[]>([]);
 
     useEffect(() => {
-        axios.get('//darleet.com/api/v0/hardatons/?page=1')
+        axios.get(`${AppConfig.apiUri}/api/v0/hardatons/?page=1`)
             .then(res => {
                 setHardathons(res.data.hardatons);
             }).catch(err => {

@@ -8,6 +8,7 @@ import {ListPopupTile} from './widgets/ListPopup/ListPopupTile';
 import {useQuery} from '@tanstack/react-query';
 import templateBGImage from '../../assets/images/events-template-bg.png';
 import moment from 'moment';
+import {AppConfig} from "../../../core";
 
 
 class Colors {
@@ -19,8 +20,6 @@ interface ShortEvent {
     title: string
     photo: string
 }
-
-const apiUri = process.env.REACT_APP_API_URI;
 
 interface Event extends ShortEvent {
     description: string
@@ -78,7 +77,7 @@ const LayoutComponent = ({children, backgroundImageUrl}: {
                 overflow: "clip",
                 backgroundColor: 'black',
                 color: 'white',
-                backgroundImage: backgroundImageUrl !== '' ? `linear-gradient( rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85) ), url(${apiUri}${backgroundImageUrl})` : templateBGImage,
+                backgroundImage: backgroundImageUrl !== '' ? `linear-gradient( rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85) ), url(${AppConfig.apiUri}${backgroundImageUrl})` : templateBGImage,
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: 'cover',
             }}
@@ -277,7 +276,7 @@ export const Events = () => {
 
     const {data: eventsList} = useQuery<ShortEvent[]>({
             queryKey: ['event-list'],
-            queryFn: () => fetch(`${apiUri}/api/v0/classic_events/`)
+            queryFn: () => fetch(`${AppConfig.apiUri}/api/v0/classic_events/`)
                 .then(r => r.json())
                 .then(d => d['events']),
             placeholderData: () => [
@@ -297,7 +296,7 @@ export const Events = () => {
     const {data: fullEvent} = useQuery<Event>({
         enabled: items[index] !== undefined,
         queryKey: ['events', items[index]?.id],
-        queryFn: () => fetch(`${apiUri}/api/v0/classic_events/${items[index].id}/`).then(r => r.json()),
+        queryFn: () => fetch(`${AppConfig.apiUri}/api/v0/classic_events/${items[index].id}/`).then(r => r.json()),
         placeholderData: _ => placeholderEvent,
     });
 
@@ -314,7 +313,7 @@ export const Events = () => {
 
     const {data: questionnairies} = useQuery<Questionnaire[]>({
         queryKey: ['events', index, 'participants'],
-        queryFn: () => fetch(`${apiUri}/api/v0/questionnaire/`)
+        queryFn: () => fetch(`${AppConfig.apiUri}/api/v0/questionnaire/`)
             .then(r => r.json())
             .then(d => d['questionnaires']),
     });
@@ -322,7 +321,7 @@ export const Events = () => {
     const {data: participant} = useQuery<Questionnaire>({
         enabled: participantId != null,
         queryKey: ['events', index, 'participants', participantId],
-        queryFn: () => fetch(`${apiUri}/api/v0/questionnaire/${participantId}/`)
+        queryFn: () => fetch(`${AppConfig.apiUri}/api/v0/questionnaire/${participantId}/`)
             .then(r => r.json()),
     });
 
