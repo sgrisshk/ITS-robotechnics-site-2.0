@@ -1,8 +1,8 @@
-interface News {
+interface Partners {
 	id: number
 	title: string
 	link: string
 	photo: string
 }
 
-export type { News }
+export type { Partners }
