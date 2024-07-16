@@ -1,9 +1,9 @@
 interface News {
-    id: number
-    title: string
-    description: string
-    new_url: string
-    photo: string
+    id: number;
+    title: string;
+    description: string;
+    new_url: string;
+    photo: string;
 }
 
-export type { News }
+export type { News };

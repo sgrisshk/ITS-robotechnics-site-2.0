@@ -1,8 +1,8 @@
 interface Partners {
-    id: number
-    title: string
-    link: string
-    photo: string
+    id: number;
+    title: string;
+    link: string;
+    photo: string;
 }
 
-export type { Partners }
+export type { Partners };
