@@ -5,6 +5,7 @@ import 'react-alice-carousel/lib/alice-carousel.css';
 import Logo from "../../utils/logo/Logo"
 import axios from "axios";
 import {Link} from "react-router-dom";
+import {AppConfig} from "../../../core";
 
 interface Partners {
     title: string;
@@ -16,7 +17,7 @@ export const Partners = () => {
     const [partners, setPartners] = useState<Partners[]>([]);
 
     useEffect(() => {
-        axios.get('//darleet.com/api/v0/partners/?page=1')
+        axios.get(`${AppConfig.apiUri}/api/v0/partners/?page=1`)
             .then(res => {
                 setPartners(res.data.partners);
             }).catch(err => {

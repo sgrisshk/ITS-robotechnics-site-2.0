@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import '../../utils/roots/news_root.scss'
 import '../../utils/logo/logo.scss'
 import Logo from "../../utils/logo/Logo"
 import arrow from "../../assets/icons/arrow.svg";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import NewsCard from "../../utils/news-card/NewsCard";
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import axios from "axios";
 import Slider from "react-slick"
 import "./news.scss"
-import { func } from 'prop-types';
-import { useRef } from "react";
+import {func} from 'prop-types';
+import {useRef} from "react";
+import {AppConfig} from "../../../core";
 
 interface News {
     title: string;
@@ -25,22 +26,22 @@ export const News = () => {
     const [news, setNews] = useState<News[]>([]);
 
     useEffect(() => {
-        axios.get('//darleet.com/api/v0/news/?page=1')
+        axios.get(`${AppConfig.apiUri}/api/v0/news/?page=1`)
             .then(res => {
                 setNews(res.data.news);
             }).catch(err => {
-                console.log('error')
-            })
+            console.log('error')
+        })
     }, []);
 
     const responsive = {
-        0: { items: 1 },
-        800: { items: 2 },
-        1000: { items: 3 },
-        2550: { items: 4 }
+        0: {items: 1},
+        800: {items: 2},
+        1000: {items: 3},
+        2550: {items: 4}
     };
 
-    const Carousel = ({ items }: { items: News[] }) => (
+    const Carousel = ({items}: { items: News[] }) => (
         <AliceCarousel
             mouseTracking
             items={items.map((item, index) => (
@@ -63,16 +64,16 @@ export const News = () => {
     );
 
     return (
-        <section className={"news-page page"} >
-            <Logo title="новости" />
+        <section className={"news-page page"}>
+            <Logo title="новости"/>
             <div className="news-carousel">
-                <Carousel items={news} />
+                <Carousel items={news}/>
             </div>
             <button className={"container-fluid container-fluid-margless button-news mx-auto"}>
                 <Link className="link" to="/news">
                     <p className={"more-text-main text-light text-uppercase  m-0 fs-5"}>подробнее</p>
                 </Link>
-            </button >
+            </button>
 
         </section>
     )
