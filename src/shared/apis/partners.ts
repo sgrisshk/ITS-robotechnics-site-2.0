@@ -1,5 +1,5 @@
 import { client } from './axios';
-import { Partners } from '../../domain/entities/Partners';
+import { Partners } from '../../domain/entities/partners';
 
 const partnersList: () => Promise<Partners[]> = async () => {
     const res = await client.get(`/partners`);
