@@ -1,13 +1,17 @@
-import React, {useEffect, useState, useRef, Ref} from 'react';
+import React, { useEffect, useState, useRef, Ref } from 'react';
 import "./achievements.scss"
 import Logo from "../../utils/logo/Logo"
 import AchieveCard from "../../utils/achieve-card/AchieveCard";
 import 'react-alice-carousel/lib/alice-carousel.css';
 import down_arrow from "../../assets/icons/arrow.svg";
 import axios from "axios";
-import {AppConfig} from "../../../core";
+import { useQuery } from '@tanstack/react-query';
+import { Achievement } from '../../../domain/entities/achievements';
+import { achievementsList } from '../../../shared/apis/achievements';
 
-interface Achievement {
+import { AppConfig } from "../../../core";
+
+interface IAchievement {
     id: number;
     title: string,
     description: string,
@@ -18,9 +22,24 @@ interface Achievement {
     inputRef: Ref<HTMLDivElement>
 }
 
-export const Achievements = () => {
+export const AchievementsPage = () => {
+    const [achievements, setAchievements] = useState<IAchievement[]>([]);
 
-    const [achievements, setAchievements] = useState<Achievement[]>([]);
+    const { data: achievement } = useQuery<Achievement[]>({
+        queryKey: ['achievement-list'],
+        queryFn: () => achievementsList(),
+        placeholderData: () => [
+            {
+                id: 1,
+                title: 'мы команда',
+                description: 'мы молодцы',
+                photo_album_url: '',
+                link_to_media: '',
+                photo: '',
+            }
+        ],
+    }
+    );
 
     useEffect(() => {
         axios.get(`${AppConfig.apiUri}/api/v0/achievements/?page=1`)
@@ -28,8 +47,8 @@ export const Achievements = () => {
                 if (res.data)
                     setAchievements(res.data.data);
             }).catch(err => {
-            console.log(err);
-        })
+                console.log(err);
+            })
     }, []);
 
     const InputRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -48,7 +67,7 @@ export const Achievements = () => {
 
     return (
         <section className="achievements-page page" id="achievements">
-            <Logo title="достижения"/>
+            <Logo title="достижения" />
             <div className="container-fluid mt-0 h-100 achievements-carousel d-flex justify-content-center px-0">
                 <div className="desktop-carousel-achievements">
                     {achievements.map((achievement, index) => (
@@ -78,7 +97,7 @@ export const Achievements = () => {
                         />
                     ))}
                     <button className={"btn b-0 p-0 bg-transparent swap-card"} onClick={swapHandler}>
-                        <img src={down_arrow} alt="down-arrow"/>
+                        <img src={down_arrow} alt="down-arrow" />
                     </button>
                 </div>
             </div>
