@@ -16,7 +16,7 @@ export const NewsPage = () => {
 
     const { data : news, isError } = useQuery<News[]>({
         queryKey: ['new-list'],
-        queryFn: () => newsList(),
+        queryFn: newsList,
         placeholderData: () => [
             {
                 'id': 1,

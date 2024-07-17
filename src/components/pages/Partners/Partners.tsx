@@ -14,7 +14,7 @@ export const PartnersPage = () => {
 
     const { data: partners, isError } = useQuery<Partners[]>({
         queryKey: ['partner-list'],
-        queryFn: () => partnersList(),
+        queryFn: partnersList,
         placeholderData: () => [
             {
                 'id': 1,

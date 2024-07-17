@@ -13,7 +13,7 @@ export const AchievementsPage = () => {
 
     const { data: achievements, isError } = useQuery<Achievement[]>({
         queryKey: ['achievement-list'],
-        queryFn: () => achievementsList(),
+        queryFn: achievementsList,
         placeholderData: () => [
             {
                 id: 1,

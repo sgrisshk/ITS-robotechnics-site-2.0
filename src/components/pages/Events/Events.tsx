@@ -277,7 +277,7 @@ export const EventsPage = () => {
 
     const {data: events} = useQuery<ShortEvent[]>({
             queryKey: ['event-list'],
-            queryFn: () => eventList(),
+            queryFn: eventList,
             placeholderData: () => [
                 {
                     id: 1,
