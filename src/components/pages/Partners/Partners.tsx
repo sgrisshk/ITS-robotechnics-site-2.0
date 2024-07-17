@@ -3,22 +3,16 @@ import React, { useEffect, useState } from "react";
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import Logo from "../../utils/logo/Logo"
-import axios from "axios";
 import { Link } from "react-router-dom";
 import { AppConfig } from "../../../core";
 import { Partners } from "../../../domain/entities/partners";
 import { useQuery } from "@tanstack/react-query";
 import { partnersList } from "../../../shared/apis/partners";
-interface IPartners {
-    title: string;
-    link: string;
-    photo: string;
-}
+
 
 export const PartnersPage = () => {
-    const [partners, setPartners] = useState<IPartners[]>([]);
 
-    const { data } = useQuery<Partners[]>({
+    const { data: partners, isError } = useQuery<Partners[]>({
         queryKey: ['partner-list'],
         queryFn: () => partnersList(),
         placeholderData: () => [
@@ -31,15 +25,7 @@ export const PartnersPage = () => {
         ],
     }
     );
-
-    useEffect(() => {
-        axios.get(`${AppConfig.apiUri}/api/v0/partners/?page=1`)
-            .then(res => {
-                setPartners(res.data.partners);
-            }).catch(err => {
-                console.log(err);
-            })
-    }, [])
+    if (isError) throw new Error();
 
     const responsive = {
         0: { items: 1 },
@@ -48,7 +34,7 @@ export const PartnersPage = () => {
         1550: { items: 4 }
     };
 
-    const Carousel = ({ items }: { items: IPartners[] }) => (
+    const Carousel = ({ items }: { items: Partners[] }) => (
         <AliceCarousel
             mouseTracking
             items={items.map((item, index) => (
@@ -71,7 +57,7 @@ export const PartnersPage = () => {
     return (
         <section className={"page page-section"}>
             <Logo title="наши партнёры" />
-            <Carousel items={partners} />
+            <Carousel items={partners ?? []} />
         </section>
     )
 }

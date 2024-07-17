@@ -4,28 +4,14 @@ import Logo from "../../utils/logo/Logo"
 import AchieveCard from "../../utils/achieve-card/AchieveCard";
 import 'react-alice-carousel/lib/alice-carousel.css';
 import down_arrow from "../../assets/icons/arrow.svg";
-import axios from "axios";
 import { useQuery } from '@tanstack/react-query';
 import { Achievement } from '../../../domain/entities/achievements';
 import { achievementsList } from '../../../shared/apis/achievements';
 
-import { AppConfig } from "../../../core";
-
-interface IAchievement {
-    id: number;
-    title: string,
-    description: string,
-    photo_album_url: string,
-    link_to_media: string,
-    photo: string,
-    index: number,
-    inputRef: Ref<HTMLDivElement>
-}
 
 export const AchievementsPage = () => {
-    const [achievements, setAchievements] = useState<IAchievement[]>([]);
 
-    const { data } = useQuery<Achievement[]>({
+    const { data: achievements, isError } = useQuery<Achievement[]>({
         queryKey: ['achievement-list'],
         queryFn: () => achievementsList(),
         placeholderData: () => [
@@ -40,16 +26,8 @@ export const AchievementsPage = () => {
         ],
     }
     );
+    if (isError) throw new Error();
 
-    useEffect(() => {
-        axios.get(`${AppConfig.apiUri}/api/v0/achievements/?page=1`)
-            .then(res => {
-                if (res.data)
-                    setAchievements(res.data.data);
-            }).catch(err => {
-                console.log(err);
-            })
-    }, []);
 
     const InputRefs = useRef<(HTMLDivElement | null)[]>([])
 
@@ -70,7 +48,7 @@ export const AchievementsPage = () => {
             <Logo title="достижения" />
             <div className="container-fluid mt-0 h-100 achievements-carousel d-flex justify-content-center px-0">
                 <div className="desktop-carousel-achievements">
-                    {achievements.map((achievement, index) => (
+                    {achievements?.map((achievement, index) => (
                         < AchieveCard
                             title={achievement.title}
                             description={achievement.description}
@@ -84,7 +62,7 @@ export const AchievementsPage = () => {
                     ))}
                 </div>
                 <div className="mobile-carousel-achievements" id="achieve-wrapper">
-                    {achievements.map((achievement, index) => (
+                    {achievements?.map((achievement, index) => (
                         <AchieveCard
                             title={achievement.title}
                             description={achievement.description}

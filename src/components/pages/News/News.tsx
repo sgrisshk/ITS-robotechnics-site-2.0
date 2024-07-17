@@ -2,33 +2,19 @@ import React, { useEffect, useState } from 'react';
 import '../../utils/roots/news_root.scss'
 import '../../utils/logo/logo.scss'
 import Logo from "../../utils/logo/Logo"
-import arrow from "../../assets/icons/arrow.svg";
 import { Link } from "react-router-dom";
 import NewsCard from "../../utils/news-card/NewsCard";
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
-import axios from "axios";
-import Slider from "react-slick"
 import "./news.scss"
-import { func } from 'prop-types';
-import { useRef } from "react";
 import { useQuery } from '@tanstack/react-query';
 import { News } from '../../../domain/entities/news';
 import { newsList } from '../../../shared/apis/news';
-import { AppConfig } from "../../../core";
-
-interface INews {
-    title: string;
-    description: string;
-    new_url: string;
-    photo: string;
-}
 
 
 export const NewsPage = () => {
-    const [news, setNews] = useState<INews[]>([]);
 
-    const { data } = useQuery<News[]>({
+    const { data : news, isError } = useQuery<News[]>({
         queryKey: ['new-list'],
         queryFn: () => newsList(),
         placeholderData: () => [
@@ -42,15 +28,7 @@ export const NewsPage = () => {
         ],  
     }
     );
-
-    useEffect(() => {
-        axios.get(`${AppConfig.apiUri}/api/v0/news/?page=1`)
-            .then(res => {
-                setNews(res.data.news);
-            }).catch(err => {
-                console.log('error')
-            })
-    }, []);
+    if (isError) throw new Error();
 
     const responsive = {
         0: { items: 1 },
@@ -59,7 +37,7 @@ export const NewsPage = () => {
         2550: { items: 4 }
     };
 
-    const Carousel = ({ items }: { items: INews[] }) => (
+    const Carousel = ({ items }: { items: News[] }) => (
         <AliceCarousel
             mouseTracking
             items={items.map((item, index) => (
@@ -85,7 +63,7 @@ export const NewsPage = () => {
         <section className={"news-page page"}>
             <Logo title="новости" />
             <div className="news-carousel">
-                <Carousel items={news} />
+                <Carousel items={news ?? []} />
             </div>
             <button className={"container-fluid container-fluid-margless button-news mx-auto"}>
                 <Link className="link" to="/news">
