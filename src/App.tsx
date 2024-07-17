@@ -7,11 +7,11 @@ import {
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Helmet} from 'react-helmet';
 import Menu from "./components/utils/menu/Menu";
-import {News} from "./components/pages/News/News";
-import {Events} from "./components/pages/Events/Events";
+import {NewsPage} from "./components/pages/News/News";
+import {EventsPage} from "./components/pages/Events/Events";
 import {Event} from "./components/pages/Event/Event";
-import {Achievements} from "./components/pages/Achievements/Achievements";
-import {Partners} from "./components/pages/Partners/Partners";
+import {AchievementsPage} from "./components/pages/Achievements/Achievements";
+import {PartnersPage} from "./components/pages/Partners/Partners";
 import {Contacts} from "./components/pages/Contacts/Contacts";
 import {Home} from "./components/pages/Home/Home";
 import {Hardathon} from "./components/pages/Hardathon/Hardathon";
@@ -30,11 +30,11 @@ function App() {
                 <Menu/>
                 <Routes>
                     <Route path="/" element={<Home/>}/>
-                    <Route path="/news" element={<News/>}/>
-                    <Route path="/events" element={<Events/>}/>
+                    <Route path="/news" element={<NewsPage/>}/>
+                    <Route path="/events" element={<EventsPage/>}/>
                     <Route path="/events/:id" element={<Event/>}/>
-                    <Route path="/achievements" element={<Achievements/>}/>
-                    <Route path="/partners" element={<Partners/>}/>
+                    <Route path="/achievements" element={<AchievementsPage/>}/>
+                    <Route path="/partners" element={<PartnersPage/>}/>
                     <Route path="/contacts" element={<Contacts/>}/>
                     <Route path="/hardathons" element={<Hardathon/>}/>
                     {/*<Route path="/hardathons/:id/partners" element={<PartnersHardathon/>} />*/}

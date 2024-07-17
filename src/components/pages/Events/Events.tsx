@@ -272,7 +272,7 @@ const EventComponent = ({event, setPopup}: {
 }
 
 
-export const Events = () => {
+export const EventsPage = () => {
     const [popup, setPopup] = useState<PopupType>(PopupType.none);
 
     const {data: events} = useQuery<ShortEvent[]>({
