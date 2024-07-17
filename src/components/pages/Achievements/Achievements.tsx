@@ -7,26 +7,16 @@ import down_arrow from "../../assets/icons/arrow.svg";
 import { useQuery } from '@tanstack/react-query';
 import { Achievement } from '../../../domain/entities/achievements';
 import { achievementsList } from '../../../shared/apis/achievements';
-
+import { eventPlaceholder } from '../../../shared/placeholders/achievements';
 
 export const AchievementsPage = () => {
 
     const { data: achievements, isError } = useQuery<Achievement[]>({
         queryKey: ['achievement-list'],
         queryFn: achievementsList,
-        placeholderData: () => [
-            {
-                id: 1,
-                title: 'мы команда',
-                description: 'мы молодцы',
-                photo_album_url: '',
-                link_to_media: '',
-                photo: '',
-            }
-        ],
+        placeholderData: () => [eventPlaceholder],
     }
     );
-    if (isError) throw new Error();
 
 
     const InputRefs = useRef<(HTMLDivElement | null)[]>([])

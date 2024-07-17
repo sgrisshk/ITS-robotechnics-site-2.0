@@ -8,24 +8,18 @@ import { AppConfig } from "../../../core";
 import { Partners } from "../../../domain/entities/partners";
 import { useQuery } from "@tanstack/react-query";
 import { partnersList } from "../../../shared/apis/partners";
-
+import { eventPlaceholder } from '../../../shared/placeholders/PARTNERS'
 
 export const PartnersPage = () => {
 
-    const { data: partners, isError } = useQuery<Partners[]>({
+    const { data: partners } = useQuery<Partners[]>({
         queryKey: ['partner-list'],
         queryFn: partnersList,
-        placeholderData: () => [
-            {
-                'id': 1,
-                'title': 'Котик',
-                'link': '',
-                'photo': '',
-            }
-        ],
+        placeholderData: () => [eventPlaceholder],
+        // onError: (error) => console.error(error.message),
     }
     );
-    if (isError) throw new Error();
+
 
     const responsive = {
         0: { items: 1 },

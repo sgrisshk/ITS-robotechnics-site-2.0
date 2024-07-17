@@ -10,22 +10,14 @@ import "./news.scss"
 import { useQuery } from '@tanstack/react-query';
 import { News } from '../../../domain/entities/news';
 import { newsList } from '../../../shared/apis/news';
-
+import { eventPlaceholder } from '../../../shared/placeholders/news';
 
 export const NewsPage = () => {
 
-    const { data : news, isError } = useQuery<News[]>({
+    const { data: news, isError } = useQuery<News[]>({
         queryKey: ['new-list'],
         queryFn: newsList,
-        placeholderData: () => [
-            {
-                'id': 1,
-                'title': 'Новость 1',
-                'description': 'Хорошие новости',
-                'new_url': '',
-                'photo': ''
-            }
-        ],  
+        placeholderData: () => [eventPlaceholder],
     }
     );
     if (isError) throw new Error();

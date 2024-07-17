@@ -1,16 +1,16 @@
 import './events.scss'
-import React, {ReactElement, useState} from 'react';
+import React, { ReactElement, useState } from 'react';
 import logo from '../../assets/icons/logo.svg';
 import leftArrow from '../../assets/icons/left-arrow.svg';
 import Carousel from 'react-bootstrap/Carousel';
-import {ListPopup} from './widgets/ListPopup/ListPopup';
-import {ListPopupTile} from './widgets/ListPopup/ListPopupTile';
-import {useQuery} from '@tanstack/react-query';
+import { ListPopup } from './widgets/ListPopup/ListPopup';
+import { ListPopupTile } from './widgets/ListPopup/ListPopupTile';
+import { useQuery } from '@tanstack/react-query';
 import templateBGImage from '../../assets/images/events-template-bg.png';
 import moment from 'moment';
-import {AppConfig} from "../../../core";
-import {eventList} from "../../../shared/apis/events";
-
+import { AppConfig } from "../../../core";
+import { eventList } from "../../../shared/apis/events";
+import { eventPlaceholder } from '../../../shared/placeholders/events';
 
 class Colors {
     static red = '#C13100';
@@ -61,7 +61,7 @@ const placeholderEvent: Event = {
 }
 
 
-const LayoutComponent = ({children, backgroundImageUrl}: {
+const LayoutComponent = ({ children, backgroundImageUrl }: {
     children: string | ReactElement | ReactElement[],
     backgroundImageUrl: string | undefined,
 }) => {
@@ -160,8 +160,8 @@ const RegistrationButton = () => {
                 height: 27,
                 borderRadius: 100,
                 textAlign: 'center',
-            }}/>
-            <div style={{width: 13}}/>
+            }} />
+            <div style={{ width: 13 }} />
             <div style={{
                 padding: '10px 0px',
                 color: 'white', textTransform: 'uppercase',
@@ -184,7 +184,7 @@ const RegistrationButton = () => {
     )
 }
 
-const ButtonComponent = ({text, onClick}: { text: string, onClick?: () => void }) => {
+const ButtonComponent = ({ text, onClick }: { text: string, onClick?: () => void }) => {
     return (
         <button
             onClick={onClick}
@@ -215,7 +215,7 @@ enum PopupType {
     participant,
 }
 
-const EventComponent = ({event, setPopup}: {
+const EventComponent = ({ event, setPopup }: {
     event?: Event,
     setPopup: (value: (((prevState: PopupType) => PopupType) | PopupType)) => void
 }) => {
@@ -238,7 +238,7 @@ const EventComponent = ({event, setPopup}: {
             >
                 {event?.title}
             </h1>
-            <div style={{height: 60}}/>
+            <div style={{ height: 60 }} />
             <div style={{
                 fontSize: 30,
                 fontWeight: 400,
@@ -255,17 +255,17 @@ const EventComponent = ({event, setPopup}: {
                     }}
                 >{event?.description ?? ''}</p>
             </div>
-            <div style={{height: 62}}/>
-            <RegistrationButton/>
-            <div style={{height: 62}}/>
+            <div style={{ height: 62 }} />
+            <RegistrationButton />
+            <div style={{ height: 62 }} />
             <div style={{
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 gap: 104,
             }}>
-                <ButtonComponent onClick={() => setPopup(PopupType.listParticipants)} text={'СПИСОК КОМАНД'}/>
-                <ButtonComponent onClick={() => setPopup(PopupType.info)} text={'ПОДРОБНЕЕ'}/>
+                <ButtonComponent onClick={() => setPopup(PopupType.listParticipants)} text={'СПИСОК КОМАНД'} />
+                <ButtonComponent onClick={() => setPopup(PopupType.info)} text={'ПОДРОБНЕЕ'} />
             </div>
         </>
     )
@@ -275,24 +275,18 @@ const EventComponent = ({event, setPopup}: {
 export const EventsPage = () => {
     const [popup, setPopup] = useState<PopupType>(PopupType.none);
 
-    const {data: events} = useQuery<ShortEvent[]>({
-            queryKey: ['event-list'],
-            queryFn: eventList,
-            placeholderData: () => [
-                {
-                    id: 1,
-                    title: 'инженерный вызов',
-                    photo: '',
-                }
-            ],
-        }
+    const { data: events } = useQuery<ShortEvent[]>({
+        queryKey: ['event-list'],
+        queryFn: eventList,
+        placeholderData: () => [eventPlaceholder],
+    }
     );
 
     const items: ShortEvent[] = events ?? [];
 
     const [index, setIndex] = useState(0);
 
-    const {data: fullEvent} = useQuery<Event>({
+    const { data: fullEvent } = useQuery<Event>({
         enabled: items[index] !== undefined,
         queryKey: ['events', items[index]?.id],
         queryFn: () => fetch(`${AppConfig.apiUri}/api/v0/classic_events/${items[index].id}/`).then(r => r.json()),
@@ -310,14 +304,14 @@ export const EventsPage = () => {
 
     const [participantId, setParticipant] = useState<number | null>(null)
 
-    const {data: questionnairies} = useQuery<Questionnaire[]>({
+    const { data: questionnairies } = useQuery<Questionnaire[]>({
         queryKey: ['events', index, 'participants'],
         queryFn: () => fetch(`${AppConfig.apiUri}/api/v0/questionnaire/`)
             .then(r => r.json())
             .then(d => d['questionnaires']),
     });
 
-    const {data: participant} = useQuery<Questionnaire>({
+    const { data: participant } = useQuery<Questionnaire>({
         enabled: participantId != null,
         queryKey: ['events', index, 'participants', participantId],
         queryFn: () => fetch(`${AppConfig.apiUri}/api/v0/questionnaire/${participantId}/`)
@@ -353,7 +347,7 @@ export const EventsPage = () => {
                     title={'ПОДРОБНЕЕ'}
                     children={[
                         <ListPopupTile
-                            children={`Дата проведения: ${moment(fullEvent?.event_date).format('YYYY-MM-DD')}`}/>,
+                            children={`Дата проведения: ${moment(fullEvent?.event_date).format('YYYY-MM-DD')}`} />,
                         <ListPopupTile><a href={fullEvent?.location}>Место проведения</a></ListPopupTile>,
                         <ListPopupTile><a href={fullEvent?.photo_album_url}>Фото</a></ListPopupTile>,
                         <ListPopupTile><a href={fullEvent?.photo_album_url}>Упоминания в СМИ</a></ListPopupTile>,
@@ -366,7 +360,7 @@ export const EventsPage = () => {
                     backgroundColor={Colors.red}
                     onClose={() => setPopup(PopupType.none)}
                     onBack={() => setPopup(PopupType.listParticipants)}
-                    title={<>Анкета от: <br/>{participant?.searcher_fio ?? ''}</>}
+                    title={<>Анкета от: <br />{participant?.searcher_fio ?? ''}</>}
                     children={[
                         <ListPopupTile>
                             Команда
@@ -380,17 +374,17 @@ export const EventsPage = () => {
                             Количество людей: {participant?.participants_count}
                         </ListPopupTile>,
                         <ListPopupTile>
-                            <div style={{minHeight: 200, padding: '10px'}}>
+                            <div style={{ minHeight: 200, padding: '10px' }}>
                                 Компетенции:
-                                <p style={{color: '#595959', display: 'block'}}>
+                                <p style={{ color: '#595959', display: 'block' }}>
                                     {participant?.required_competencies}
                                 </p>
                             </div>
                         </ListPopupTile>,
                         <ListPopupTile>
-                            <div style={{minHeight: 200, padding: '10px'}}>
+                            <div style={{ minHeight: 200, padding: '10px' }}>
                                 Дополнительная информация:
-                                <p style={{color: '#595959', display: 'block'}}>
+                                <p style={{ color: '#595959', display: 'block' }}>
                                     {participant?.additional}
                                 </p>
                             </div>
@@ -416,7 +410,7 @@ export const EventsPage = () => {
                             backgroundColor: 'transparent',
                         }}
                     >
-                        <img src={leftArrow} alt={''}/>
+                        <img src={leftArrow} alt={''} />
                     </button>
                     <Carousel
                         activeIndex={index}
@@ -429,7 +423,7 @@ export const EventsPage = () => {
                         {items.map((event) => {
                             return (
                                 <Carousel.Item key={event.title}>
-                                    <EventComponent event={fullEvent} setPopup={setPopup}/>
+                                    <EventComponent event={fullEvent} setPopup={setPopup} />
                                 </Carousel.Item>
                             );
                         })}
@@ -443,7 +437,7 @@ export const EventsPage = () => {
                             width: 61,
                         }}
                     >
-                        <img src={leftArrow} alt={''} style={{transform: 'rotate(180deg)'}}/>
+                        <img src={leftArrow} alt={''} style={{ transform: 'rotate(180deg)' }} />
                     </button>
                 </div>
             </LayoutComponent>
