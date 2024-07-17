@@ -10,7 +10,7 @@ import templateBGImage from '../../assets/images/events-template-bg.png';
 import moment from 'moment';
 import { AppConfig } from "../../../core";
 import { eventList } from "../../../shared/apis/events";
-import { eventPlaceholder } from '../../../shared/placeholders/events';
+import { eventPlaceholder } from '../../../shared/placeholders/EVENTS';
 
 class Colors {
     static red = '#C13100';
