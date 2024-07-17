@@ -1,15 +1,15 @@
 import "../../utils/roots/home_root.scss"
 import "./home.scss"
 import Logo from "../../utils/logo/Logo"
-import { Contacts } from "../Contacts/Contacts";
-import { News } from "../News/News";
-import { Achievements } from "../Achievements/Achievements";
+import { ContactsPage } from "../Contacts/Contacts";
+import { NewsPage } from "../News/News";
+import { AchievementsPage } from "../Achievements/Achievements";
 import vk_logo from "../../assets/icons/vk_logo.svg"
 import React, { useRef } from "react";
 import { func } from "prop-types";
 
 
-export const Home = () => {
+export const HomePage = () => {
     const newsRef = useRef<HTMLDivElement | null>(null);
 
     function scrolToNews() {
@@ -43,10 +43,10 @@ export const Home = () => {
                 </div>
             </section>
             <div id="news" ref={newsRef}>
-                <News />
+                <NewsPage />
             </div>
-            <Achievements />
-            <Contacts />
+            <AchievementsPage />
+            <ContactsPage />
         </div>
 
     )
