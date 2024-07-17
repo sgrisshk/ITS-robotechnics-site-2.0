@@ -25,7 +25,7 @@ interface IAchievement {
 export const AchievementsPage = () => {
     const [achievements, setAchievements] = useState<IAchievement[]>([]);
 
-    const { data: achievement } = useQuery<Achievement[]>({
+    const { data } = useQuery<Achievement[]>({
         queryKey: ['achievement-list'],
         queryFn: () => achievementsList(),
         placeholderData: () => [

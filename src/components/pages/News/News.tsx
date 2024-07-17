@@ -28,7 +28,7 @@ interface INews {
 export const NewsPage = () => {
     const [news, setNews] = useState<INews[]>([]);
 
-    const { } = useQuery<News[]>({
+    const { data } = useQuery<News[]>({
         queryKey: ['new-list'],
         queryFn: () => newsList(),
         placeholderData: () => [

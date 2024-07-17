@@ -18,7 +18,7 @@ interface IPartners {
 export const PartnersPage = () => {
     const [partners, setPartners] = useState<IPartners[]>([]);
 
-    const { } = useQuery<Partners[]>({
+    const { data } = useQuery<Partners[]>({
         queryKey: ['partner-list'],
         queryFn: () => partnersList(),
         placeholderData: () => [
