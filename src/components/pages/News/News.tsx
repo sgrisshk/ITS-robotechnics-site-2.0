@@ -14,13 +14,12 @@ import { eventPlaceholder } from '../../../shared/placeholders/NEWS';
 
 export const NewsPage = () => {
 
-    const { data: news, isError } = useQuery<News[]>({
+    const { data: news } = useQuery<News[]>({
         queryKey: ['new-list'],
         queryFn: newsList,
         placeholderData: () => [eventPlaceholder],
     }
     );
-    if (isError) throw new Error();
 
     const responsive = {
         0: { items: 1 },

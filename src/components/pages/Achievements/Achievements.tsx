@@ -11,7 +11,7 @@ import { eventPlaceholder } from '../../../shared/placeholders/ACHIEVEMENTS';
 
 export const AchievementsPage = () => {
 
-    const { data: achievements, isError } = useQuery<Achievement[]>({
+    const { data: achievements} = useQuery<Achievement[]>({
         queryKey: ['achievement-list'],
         queryFn: achievementsList,
         placeholderData: () => [eventPlaceholder],
