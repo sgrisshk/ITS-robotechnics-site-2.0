@@ -8,7 +8,7 @@ import { AppConfig } from "../../../core";
 import { Partners } from "../../../domain/entities/partners";
 import { useQuery } from "@tanstack/react-query";
 import { partnersList } from "../../../shared/apis/partners";
-import { eventPlaceholder } from '../../../shared/placeholders/PARTNERS'
+import { eventPlaceholder } from '../../../shared/placeholders/partners'
 
 export const PartnersPage = () => {
 
@@ -16,7 +16,6 @@ export const PartnersPage = () => {
         queryKey: ['partner-list'],
         queryFn: partnersList,
         placeholderData: () => [eventPlaceholder],
-        // onError: (error) => console.error(error.message),
     }
     );
 

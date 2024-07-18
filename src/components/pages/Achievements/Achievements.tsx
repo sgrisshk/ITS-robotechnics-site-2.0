@@ -7,7 +7,7 @@ import down_arrow from "../../assets/icons/arrow.svg";
 import { useQuery } from '@tanstack/react-query';
 import { Achievement } from '../../../domain/entities/achievements';
 import { achievementsList } from '../../../shared/apis/achievements';
-import { eventPlaceholder } from '../../../shared/placeholders/ACHIEVEMENTS';
+import { eventPlaceholder } from '../../../shared/placeholders/achievements';
 
 export const AchievementsPage = () => {
 

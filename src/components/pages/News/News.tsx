@@ -10,7 +10,7 @@ import "./news.scss"
 import { useQuery } from '@tanstack/react-query';
 import { News } from '../../../domain/entities/news';
 import { newsList } from '../../../shared/apis/news';
-import { eventPlaceholder } from '../../../shared/placeholders/NEWS';
+import { eventPlaceholder } from '../../../shared/placeholders/news';
 
 export const NewsPage = () => {
 
