@@ -1,40 +1,21 @@
 import './events.scss'
 import React, {ReactElement, useState} from 'react';
 import logo from '../../assets/icons/logo.svg';
-import leftArrow from '../../assets/icons/left-arrow.svg';
 import Carousel from 'react-bootstrap/Carousel';
-import {ListPopup} from './widgets/ListPopup/ListPopup';
+import ListPopup from './widgets/ListPopup/ListPopup';
 import {ListPopupTile} from './widgets/ListPopup/ListPopupTile';
 import {useQuery} from '@tanstack/react-query';
 import templateBGImage from '../../assets/images/events-template-bg.png';
 import moment from 'moment';
+import {eventList} from "../../../shared/apis/events";
+import EventCard from "./widgets/EventCard";
+import {ShortEvent, Event, ShortQuestionnaire} from "./entity";
+import SliderNavigateButton from "./widgets/SliderNavigateButton";
 import {AppConfig} from "../../../core";
 
 
 class Colors {
     static red = '#C13100';
-}
-
-interface ShortEvent {
-    id: number
-    title: string
-    photo: string
-}
-
-interface Event extends ShortEvent {
-    description: string
-    photo_album_url: string
-    documents_url: string
-    location: string
-    event_date: string
-    social_media_mention: string
-    registration_link: string
-}
-
-export interface ShortQuestionnaire {
-    id: number
-    searcher_fio: string
-    classic_event: number
 }
 
 export interface Questionnaire extends ShortQuestionnaire {
@@ -47,16 +28,17 @@ export interface Questionnaire extends ShortQuestionnaire {
 
 const placeholderEvent: Event = {
     id: -1,
-    title: '',
+    title: 'инженерный вызов',
     photo: '',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n' +
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' +
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
     photo_album_url: '',
     documents_url: '',
     location: '',
     event_date: '',
     social_media_mention: '',
-    registration_link: '',
+    registration_link: 'https://vk.com/',
 }
 
 
@@ -93,9 +75,9 @@ const LayoutComponent = ({children, backgroundImageUrl}: {
             }}>
                 <div
                     style={{
-                        paddingTop: 76,
-                        paddingLeft: 160,
-                        paddingRight: 110,
+                        // paddingTop: 76,
+                        // paddingLeft: 160,
+                        // paddingRight: 110,
                         // position: 'absolute',
                         // top: 0,
                         // left: 0,
@@ -104,31 +86,29 @@ const LayoutComponent = ({children, backgroundImageUrl}: {
                 >
                     <a
                         href={'/'}
-                        style={{
-                            position: 'absolute',
-                            width: 112,
-                            height: 114,
-                        }}
                     >
                         <img
                             src={logo}
-                            className='logo-img'
-                            alt=''
+                            className={`
+                            tw-absolute
+                            tw-mt-5 lg:tw-mt-15 xl:tw-mt-40
+                            tw-ml-5 lg:tw-ml-15 xl:tw-ml-40
+                            tw-h-12 tw-w-12 lg:tw-h-20 lg:tw-w-20 xl:tw-h-28 xl:tw-w-28
+                            `}
+                            alt='logo'
                             style={{
-                                display: 'block'
+                                objectFit: 'cover'
                             }}
                         />
                     </a>
                     <div
                         style={{
-                            top: 222 - 76,
+                            top: 0,
                             left: 0,
                             right: 0,
                             height: 'max-content',
                             position: 'absolute',
-                            paddingBottom: 120,
                             color: 'white',
-                            // backgroundColor: 'red',
                         }}
                     >
                         {children}
@@ -139,73 +119,7 @@ const LayoutComponent = ({children, backgroundImageUrl}: {
     );
 }
 
-const RegistrationButton = () => {
-    return (
-        <button style={{
-            backgroundColor: 'transparent',
-            border: 'none',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'start',
-            justifyItems: 'center',
-            marginTop: 10,
-            color: 'white',
-        }}>
-            <div style={{
-                backgroundColor: Colors.red,
-                content: '',
-                alignSelf: 'center',
-                width: 27,
-                height: 27,
-                borderRadius: 100,
-                textAlign: 'center',
-            }}/>
-            <div style={{width: 13}}/>
-            <div style={{
-                padding: '10px 0px',
-                color: 'white', textTransform: 'uppercase',
-                fontFamily: 'Intro Black',
-                fontSize: 35,
-                fontWeight: 900,
-                lineHeight: 1,
-                textAlign: 'left',
-            }}>
-                ЗАРЕГИСТРИРОВАТЬСЯ
-            </div>
-            <span style={{
-                marginLeft: 'auto',
-                paddingLeft: 4,
-                paddingTop: 8,
-                fontSize: 16,
-                transform: 'rotate(-45deg)',
-            }}>➔</span>
-        </button>
-    )
-}
 
-const ButtonComponent = ({text, onClick}: { text: string, onClick?: () => void }) => {
-    return (
-        <button
-            onClick={onClick}
-            style={{
-                textTransform: 'uppercase',
-                backgroundColor: Colors.red,
-                borderRadius: 60,
-                border: 'none',
-                color: 'white',
-                width: '100%',
-                height: 80,
-                padding: '24px 24px',
-                fontSize: 30,
-                fontWeight: 400,
-                lineHeight: 36 / 30,
-                textAlign: 'center',
-            }}
-        >
-            {text}
-        </button>
-    )
-}
 
 enum PopupType {
     none,
@@ -214,71 +128,13 @@ enum PopupType {
     participant,
 }
 
-const EventComponent = ({event, setPopup}: {
-    event?: Event,
-    setPopup: (value: (((prevState: PopupType) => PopupType) | PopupType)) => void
-}) => {
 
-    return (
-        <>
-            <h1
-                style={{
-                    fontSize: 75,
-                    lineHeight: '90px',
-                    fontWeight: 400,
-                    textAlign: 'center',
-                    color: 'white',
-                    textTransform: 'uppercase',
-                    textDecoration: 'underline',
-                    textDecorationColor: Colors.red,
-                    textDecorationThickness: '4px',
-                    textUnderlineOffset: '2px',
-                }}
-            >
-                {event?.title}
-            </h1>
-            <div style={{height: 60}}/>
-            <div style={{
-                fontSize: 30,
-                fontWeight: 400,
-                lineHeight: 36 / 30,
-                textAlign: 'left',
-                textWrap: 'wrap',
-                maxHeight: '20vh',
-                width: '70vw',
-                overflowY: "scroll"
-            }}>
-                <p
-                    style={{
-                        textWrap: "wrap",
-                    }}
-                >{event?.description ?? ''}</p>
-            </div>
-            <div style={{height: 62}}/>
-            <RegistrationButton/>
-            <div style={{height: 62}}/>
-            <div style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                gap: 104,
-            }}>
-                <ButtonComponent onClick={() => setPopup(PopupType.listParticipants)} text={'СПИСОК КОМАНД'}/>
-                <ButtonComponent onClick={() => setPopup(PopupType.info)} text={'ПОДРОБНЕЕ'}/>
-            </div>
-        </>
-    )
-}
-
-
-export const Events = () => {
+export const EventsPage = () => {
     const [popup, setPopup] = useState<PopupType>(PopupType.none);
 
-    const {data: eventsList} = useQuery<ShortEvent[]>({
+    const {data: events} = useQuery<ShortEvent[]>({
             queryKey: ['event-list'],
-            queryFn: () => fetch(`${AppConfig.apiUri}/api/v0/classic_events/`)
-                .then(r => r.json())
-                .then(d => d['events']),
+            queryFn: () => eventList(),
             placeholderData: () => [
                 {
                     id: 1,
@@ -289,12 +145,12 @@ export const Events = () => {
         }
     );
 
-    const items: ShortEvent[] = eventsList ?? [];
+    const items: ShortEvent[] = events ?? [];
 
     const [index, setIndex] = useState(0);
 
     const {data: fullEvent} = useQuery<Event>({
-        enabled: items[index] !== undefined,
+        enabled: items[index] !== undefined && items[index].id >= 0,
         queryKey: ['events', items[index]?.id],
         queryFn: () => fetch(`${AppConfig.apiUri}/api/v0/classic_events/${items[index].id}/`).then(r => r.json()),
         placeholderData: _ => placeholderEvent,
@@ -325,7 +181,6 @@ export const Events = () => {
             .then(r => r.json()),
     });
 
-
     // @ts-ignore
     return (
         <>
@@ -337,11 +192,12 @@ export const Events = () => {
                     children={
                         questionnairies?.map(
                             questionnaire => <ListPopupTile
-                                onClick={() => setPopup(PopupType.participant)}
+                                onClick={() => {
+                                    setPopup(PopupType.participant)
+                                    setParticipant(questionnaire.id);
+                                }}
                             >
-                                <a onClick={() => setParticipant(questionnaire.id)}>
                                     {`Анкета от ${questionnaire.searcher_fio}`}
-                                </a>
                             </ListPopupTile>
                         )
                     }
@@ -354,11 +210,33 @@ export const Events = () => {
                     title={'ПОДРОБНЕЕ'}
                     children={[
                         <ListPopupTile
-                            children={`Дата проведения: ${moment(fullEvent?.event_date).format('YYYY-MM-DD')}`}/>,
-                        <ListPopupTile><a href={fullEvent?.location}>Место проведения</a></ListPopupTile>,
-                        <ListPopupTile><a href={fullEvent?.photo_album_url}>Фото</a></ListPopupTile>,
-                        <ListPopupTile><a href={fullEvent?.photo_album_url}>Упоминания в СМИ</a></ListPopupTile>,
-                        <ListPopupTile><a href={fullEvent?.documents_url}>Документы</a></ListPopupTile>,
+                            key={'date'}
+                            children={`Дата проведения: ${moment(fullEvent?.event_date).format('YYYY-MM-DD')}`}
+                        />,
+                        <ListPopupTile
+                            key={'location'}
+                            onClick={() => window.open(fullEvent?.location)}
+                        >
+                            Место проведения
+                        </ListPopupTile>,
+                        <ListPopupTile
+                            key={'photo'}
+                            onClick={() => window.open(fullEvent?.photo_album_url)}
+                        >
+                            Фото
+                        </ListPopupTile>,
+                        <ListPopupTile
+                            key={'mentions'}
+                            onClick={() => window.open(fullEvent?.social_media_mention)}
+                        >
+                            Упоминания в СМИ
+                        </ListPopupTile>,
+                        <ListPopupTile
+                            key={'docs'}
+                            onClick={() => window.open(fullEvent?.documents_url)}
+                        >
+                            Документы
+                        </ListPopupTile>,
                     ]}
                 /> : null
             }
@@ -372,14 +250,8 @@ export const Events = () => {
                         <ListPopupTile>
                             Команда
                         </ListPopupTile>,
-                        <ListPopupTile>
-                            <a href={participant?.seacher_VK}>
-                                Вконтакте
-                            </a>
-                        </ListPopupTile>,
-                        <ListPopupTile>
-                            Количество людей: {participant?.participants_count}
-                        </ListPopupTile>,
+                        <ListPopupTile onClick={() => window.open(participant?.seacher_VK)}>Вконтакте</ListPopupTile>,
+                        <ListPopupTile>Количество людей: {participant?.participants_count}</ListPopupTile>,
                         <ListPopupTile>
                             <div style={{minHeight: 200, padding: '10px'}}>
                                 Компетенции:
@@ -401,24 +273,14 @@ export const Events = () => {
             }
             <LayoutComponent backgroundImageUrl={items[index]?.photo}>
                 <div style={{
-                    gap: 82,
-                    paddingTop: 76,
-                    paddingLeft: 160,
-                    paddingRight: 110,
+                    // gap: 82,
+                    // paddingTop: 76,
+                    // paddingLeft: 160,
+                    // paddingRight: 110,
                     display: 'flex',
                     flexDirection: 'row',
                     alignItems: 'center',
                 }}>
-                    <button
-                        onClick={() => handleSelect(index - 1)}
-                        style={{
-                            width: 61,
-                            border: 'none',
-                            backgroundColor: 'transparent',
-                        }}
-                    >
-                        <img src={leftArrow} alt={''}/>
-                    </button>
                     <Carousel
                         activeIndex={index}
                         onSelect={handleSelect}
@@ -430,22 +292,35 @@ export const Events = () => {
                         {items.map((event) => {
                             return (
                                 <Carousel.Item key={event.title}>
-                                    <EventComponent event={fullEvent} setPopup={setPopup}/>
+                                    <div className={
+                                        'tw-w-screen tw-h-screen ' +
+                                        'tw-flex tw-justify-center tw-items-start ' +
+                                        'tw-overflow-scroll'
+                                    }>
+                                        <div className={'tw-w-3/4 lg:tw-h-4/5 tw-mx-auto tw-relative'}>
+                                            <div className={'tw-h-28 lg:tw-h-32 2xl:tw-h-44'}/>
+                                            <SliderNavigateButton
+                                                onClick={() => handleSelect(index - 1)}
+                                            />
+                                            <SliderNavigateButton
+                                                onClick={() => handleSelect(index + 1)}
+                                                reversed={true}
+                                            />
+                                            {
+                                                fullEvent !== undefined ?
+                                                    <EventCard
+                                                        event={fullEvent}
+                                                        onClickInfo={() => setPopup(PopupType.info)}
+                                                        onClickListParticipants={() => setPopup(PopupType.listParticipants)}
+                                                    /> : <></>
+                                            }
+                                        </div>
+                                    </div>
                                 </Carousel.Item>
                             );
                         })}
 
                     </Carousel>
-                    <button
-                        onClick={() => handleSelect(index + 1)}
-                        style={{
-                            backgroundColor: 'transparent',
-                            border: 'none',
-                            width: 61,
-                        }}
-                    >
-                        <img src={leftArrow} alt={''} style={{transform: 'rotate(180deg)'}}/>
-                    </button>
                 </div>
             </LayoutComponent>
         </>

@@ -2,6 +2,7 @@ import React from 'react';
 import "../roots/newsCard_root.scss"
 import './newscard.scss';
 import arrow from "../../assets/icons/arrow.svg";
+import {AppConfig} from "../../../core";
 
 const NewsCard = ({ title, description, new_url, photo }: {
     title: string;
@@ -13,7 +14,7 @@ const NewsCard = ({ title, description, new_url, photo }: {
         <div className="news-card">
             <div className={"news-mobile orange-gradient  position-relative"}>
                 <div className="news-photo">
-                    <img src={photo} alt="news_photo_mobile" />
+                    <img src={`${AppConfig.apiUri}${photo}`} alt="news_photo_mobile" />
                 </div>
                 <div className="card-title position-absolute bottom-0 start-50 translate-middle-x mb-5">
                     <p className=" text-weight-bold text-white ">{title}</p>
@@ -21,7 +22,7 @@ const NewsCard = ({ title, description, new_url, photo }: {
             </div>
             <div className={"news-desktop position-relative "}>
                 <div className="news-photo">
-                    <img src={photo} alt="news_photo_mobile" />
+                    <img src={`${AppConfig.apiUri}${photo}`} alt="news_photo_mobile" />
                 </div>
                 <div className="card-title"><p className="m-0  text-white">{title}</p></div>
                 <div className="card-text">
