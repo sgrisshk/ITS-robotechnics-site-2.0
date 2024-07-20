@@ -293,7 +293,7 @@ export const Events = () => {
     const [index, setIndex] = useState(0);
 
     const {data: fullEvent} = useQuery<Event>({
-        enabled: items[index] !== undefined,
+        enabled: items[index] !== undefined && items[index].id >= 0,
         queryKey: ['events', items[index]?.id],
         queryFn: () => fetch(`${AppConfig.apiUri}/api/v0/classic_events/${items[index].id}/`).then(r => r.json()),
         placeholderData: _ => placeholderEvent,
