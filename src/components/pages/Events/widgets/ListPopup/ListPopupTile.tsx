@@ -16,6 +16,7 @@ export const ListPopupTile = ({children, onClick}: ListPopupTileProps) => {
                 color: 'black',
                 width: '100%',
                 minHeight: 62,
+                maxHeight: 522,
                 fontSize: 27,
                 fontWeight: 400,
                 lineHeight: 32.4 / 30,

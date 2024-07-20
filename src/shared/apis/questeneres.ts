@@ -2,7 +2,7 @@ import { client } from './axios';
 import { ShortQuestionnaire } from '../../domain/entities/events';
 
 const questenereList: () => Promise<ShortQuestionnaire[]> = async () => {
-    const res = await client.get('/api/v0/questionnaire');
+    const res = await client.get('/questionnaire');
     const questionnaires = res.data['questionnaires'];
     if (res.status >= 300) {
         throw new Error();
