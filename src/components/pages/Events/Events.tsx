@@ -9,6 +9,7 @@ import {useQuery} from '@tanstack/react-query';
 import templateBGImage from '../../assets/images/events-template-bg.png';
 import moment from 'moment';
 import {AppConfig} from "../../../core";
+import {eventList} from "../../../shared/apis/events";
 
 
 class Colors {
@@ -271,14 +272,12 @@ const EventComponent = ({event, setPopup}: {
 }
 
 
-export const Events = () => {
+export const EventsPage = () => {
     const [popup, setPopup] = useState<PopupType>(PopupType.none);
 
-    const {data: eventsList} = useQuery<ShortEvent[]>({
+    const {data: events} = useQuery<ShortEvent[]>({
             queryKey: ['event-list'],
-            queryFn: () => fetch(`${AppConfig.apiUri}/api/v0/classic_events/`)
-                .then(r => r.json())
-                .then(d => d['events']),
+            queryFn: () => eventList(),
             placeholderData: () => [
                 {
                     id: 1,
@@ -289,12 +288,12 @@ export const Events = () => {
         }
     );
 
-    const items: ShortEvent[] = eventsList ?? [];
+    const items: ShortEvent[] = events ?? [];
 
     const [index, setIndex] = useState(0);
 
     const {data: fullEvent} = useQuery<Event>({
-        enabled: items[index] !== undefined,
+        enabled: items[index] !== undefined && items[index].id >= 0,
         queryKey: ['events', items[index]?.id],
         queryFn: () => fetch(`${AppConfig.apiUri}/api/v0/classic_events/${items[index].id}/`).then(r => r.json()),
         placeholderData: _ => placeholderEvent,

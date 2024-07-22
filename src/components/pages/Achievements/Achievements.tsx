@@ -1,36 +1,23 @@
-import React, {useEffect, useState, useRef, Ref} from 'react';
+import React, { useEffect, useState, useRef, Ref } from 'react';
 import "./achievements.scss"
 import Logo from "../../utils/logo/Logo"
 import AchieveCard from "../../utils/achieve-card/AchieveCard";
 import 'react-alice-carousel/lib/alice-carousel.css';
 import down_arrow from "../../assets/icons/arrow.svg";
-import axios from "axios";
-import {AppConfig} from "../../../core";
+import { useQuery } from '@tanstack/react-query';
+import { Achievement } from '../../../domain/entities/achievements';
+import { achievementsList } from '../../../shared/apis/achievements';
+import { eventPlaceholder } from '../../../shared/placeholders/achievements';
 
-interface Achievement {
-    id: number;
-    title: string,
-    description: string,
-    photo_album_url: string,
-    link_to_media: string,
-    photo: string,
-    index: number,
-    inputRef: Ref<HTMLDivElement>
-}
+export const AchievementsPage = () => {
 
-export const Achievements = () => {
+    const { data: achievements} = useQuery<Achievement[]>({
+        queryKey: ['achievement-list'],
+        queryFn: achievementsList,
+        placeholderData: () => [eventPlaceholder],
+    }
+    );
 
-    const [achievements, setAchievements] = useState<Achievement[]>([]);
-
-    useEffect(() => {
-        axios.get(`${AppConfig.apiUri}/api/v0/achievements/?page=1`)
-            .then(res => {
-                if (res.data)
-                    setAchievements(res.data.data);
-            }).catch(err => {
-            console.log(err);
-        })
-    }, []);
 
     const InputRefs = useRef<(HTMLDivElement | null)[]>([])
 
@@ -48,10 +35,10 @@ export const Achievements = () => {
 
     return (
         <section className="achievements-page page" id="achievements">
-            <Logo title="достижения"/>
+            <Logo title="достижения" />
             <div className="container-fluid mt-0 h-100 achievements-carousel d-flex justify-content-center px-0">
                 <div className="desktop-carousel-achievements">
-                    {achievements.map((achievement, index) => (
+                    {achievements?.map((achievement, index) => (
                         < AchieveCard
                             title={achievement.title}
                             description={achievement.description}
@@ -65,7 +52,7 @@ export const Achievements = () => {
                     ))}
                 </div>
                 <div className="mobile-carousel-achievements" id="achieve-wrapper">
-                    {achievements.map((achievement, index) => (
+                    {achievements?.map((achievement, index) => (
                         <AchieveCard
                             title={achievement.title}
                             description={achievement.description}
@@ -78,7 +65,7 @@ export const Achievements = () => {
                         />
                     ))}
                     <button className={"btn b-0 p-0 bg-transparent swap-card"} onClick={swapHandler}>
-                        <img src={down_arrow} alt="down-arrow"/>
+                        <img src={down_arrow} alt="down-arrow" />
                     </button>
                 </div>
             </div>

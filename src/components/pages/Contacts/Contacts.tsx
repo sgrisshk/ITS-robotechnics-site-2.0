@@ -8,7 +8,7 @@ import React from "react";
 
 
 
-export const Contacts = () => {
+export const ContactsPage = () => {
 
     const items = [
         <div className={"card mx-auto w-100 my-auto"}>

@@ -11,7 +11,7 @@ interface Hardathon {
     photo: string
 }
 
-export const Hardathon = () => {
+export const HardathonPage = () => {
 
     const [hardathons, setHardathons] = useState<Hardathon[]>([]);
 
